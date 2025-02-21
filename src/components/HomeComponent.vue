@@ -35,7 +35,7 @@ export default {
   },
   created() {
     // Conectar ao servidor e ouvir as mensagens recebidas
-    this.socket = io('http://192.168.15.21:3000');
+    this.socket = io('http://omnizap-backend-production.up.railway.app:3000');
     this.socket.on('receberMensagem', (msg) => {
       if (this.mensagens.length >= this.maxMensagens) {
         this.mensagens = [];
