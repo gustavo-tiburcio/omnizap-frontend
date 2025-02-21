@@ -1,4 +1,4 @@
-# ex001
+# Omnizap-frontend
 
 ## Project setup
 ```
