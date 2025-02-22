@@ -1,5 +1,9 @@
 <template>
   <div class="Home">
+    <div class="error" v-show="error">
+      Escreva um nome e uma mensagem para enviar uma mensagem!!
+    </div>
+
     <div class="title" style="color: rgb(25, 255, 94);">Omnizap</div>
 
     <div class="subTitle">Seu Nome:</div>
@@ -26,8 +30,9 @@ import { io } from 'socket.io-client';
 export default {
   data() {
     return {
+      error: false,
       nomeUsuario: "",
-      maxMensagens: 10,
+      maxMensagens: 7,
       mensagem: "",  // Usando mensagem para armazenar a mensagem digitada
       mensagens: [],  // Lista para armazenar as mensagens recebidas
       coresUsuarios: {}    
@@ -35,7 +40,7 @@ export default {
   },
   created() {
     // Conectar ao servidor e ouvir as mensagens recebidas
-    this.socket = io('http://192.168.15.21:3000');
+    this.socket = io('https://apiomnizap.serveo.net');
     this.socket.on('receberMensagem', (msg) => {
       if (this.mensagens.length >= this.maxMensagens) {
         this.mensagens = [];
@@ -46,11 +51,12 @@ export default {
   methods: {
     enviarMensagem() {
       if (this.mensagem.trim() !== "" && this.nomeUsuario.trim() !== "") {
+        this.error = false;
         const msgFormatada = `${this.nomeUsuario}: ${this.mensagem}`;
         this.socket.emit('enviarMensagem', msgFormatada);
         this.mensagem = "";
       } else {
-        alert("Por favor, insira um nome e uma mensagem.");
+        this.error = true;
       }
     },
     formatarMensagem(msg) {
@@ -104,13 +110,26 @@ export default {
 }
 
 .msg {
+  width: 90vw;
   max-width: 600px;
-  min-width: 500px;
   border-radius: 17px;
   background-color: rgb(241, 241, 241);
   padding: 10px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.575);
   text-align: start;
+}
+
+.error {
+  padding: 10px;
+  padding-inline: 12px;
+  max-width: 600px;
+  min-width: 500px;
+  border-radius: 8px;
+  margin-top: 8px;
+  font-size: 16px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.575);
+  background-color: rgb(226, 60, 60);
+  color: white;
 }
 
 </style>
