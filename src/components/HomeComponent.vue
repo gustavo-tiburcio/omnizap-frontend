@@ -40,8 +40,11 @@ export default {
   },
   created() {
     // Conectar ao servidor e ouvir as mensagens recebidas
-    this.socket = io('https://apiomnizap.serveo.net');
+    this.socket = io('https://apiomnizap.serveo.net', {
+      transports: ['websocket', 'polling']
+    });
     this.socket.on('receberMensagem', (msg) => {
+      console.log('📩 Mensagem recebida no frontend:', msg);
       if (this.mensagens.length >= this.maxMensagens) {
         this.mensagens = [];
       }
